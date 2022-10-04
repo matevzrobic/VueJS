@@ -1,0 +1,59 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - production
+    paths-ignore:
+      - "docs/**"
+      - "README.md"
+jobs:
+  build-and-test-backend:
+    runs-on:
+      - ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 15.x
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - name: Install MongoDB
+        run: sudo docker run --name tpo-dog-walkers -d -p 27017-27019:27017-27019 mongo
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          project: ./src/backend
+          working-directory: ./src/backend
+          start: npm run serve
+          command: npx cypress run
+      - name: Deploy API to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY2 }}
+          heroku_app_name: ${{ secrets.HEROKU_PRODUCTION2 }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL2 }}
+          branch: production
+          appdir: "src/backend"
+  build-frontend:
+    runs-on:
+      - ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 15.x
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy Frontend to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_PRODUCTION }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          branch: production
+          appdir: "src/frontend"

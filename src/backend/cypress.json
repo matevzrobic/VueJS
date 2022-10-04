@@ -1,0 +1,9 @@
+{
+  "integrationFolder": "../../test/cypress/integration",
+  "env": {
+    "codeCoverage": {
+      "url": "http://localhost:3000/__coverage__",
+      "expectBackendCoverageOnly": true
+    }
+  }
+}

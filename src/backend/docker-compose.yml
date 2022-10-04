@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  main-db:
+    image: mongo
+    container_name: tpo-dog-walkers
+    ports:
+      - "27017-27019:27017-27019"
+
+  image-db:
+    image: mongo
+    container_name: images-dog-walker
+    ports:
+      - "27020-27022:27020-27022"

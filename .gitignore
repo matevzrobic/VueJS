@@ -1,0 +1,11 @@
+.*
+!.envrc
+!.github
+!.gitignore
+!.gitkeep
+
+node_modules
+dist
+/src/backend/coverage/
+/package-lock.json
+/package.json

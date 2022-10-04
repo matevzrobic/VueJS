@@ -1,0 +1,36 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - test
+    paths-ignore:
+      - "README.md"
+      - "./docs"
+
+jobs:
+  backend:
+    runs-on:
+      - ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 15.x
+    env:
+      working-directory: ./src/backend
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - name: Install MongoDB
+        run: sudo docker run --name tpo-dog-walkers -d -p 27017-27019:27017-27019 mongo
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          project: ./src/backend
+          working-directory: ./src/backend
+          start: npm run serve
+          command: npx cypress run
