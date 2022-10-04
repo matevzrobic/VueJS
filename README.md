@@ -1,3 +1,5 @@
+# I had to copy the whole project as original project was made from a University group account and was set to private.
+
 # Lastni projekt pri predmetu TPO
 
 Vsaka skupina, ki je sestavljena iz 4 oz. 5 članov, mora razviti lastni projekt (LP) na izbrani problemski domeni, in sicer od **predloga projekta** do **implementacije**, kjer je podrobna razdelitev naslednja:
